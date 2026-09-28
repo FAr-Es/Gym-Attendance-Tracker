@@ -1,5 +1,8 @@
 package com.fares.GymTrack.services;
 import java.time.LocalDate;
+import java.util.List;
+
+import com.fares.GymTrack.entity.Subscription;
 
 public class MembershipStatusCalculator {
 
@@ -27,4 +30,17 @@ public class MembershipStatusCalculator {
 
         return MembershipStatus.EXPIRED;
     }
+
+    public static Subscription findMostRecentSubscription(List<Subscription> subscriptions) {
+
+    Subscription mostRecent = null;
+
+    for (Subscription subscription : subscriptions) {
+        if (mostRecent == null || subscription.getStartDate().isAfter(mostRecent.getStartDate())) {
+            mostRecent = subscription;
+        }
+    }
+
+    return mostRecent;
+}
 }

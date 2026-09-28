@@ -48,15 +48,18 @@ public class SubscriptionController {
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Subscription not found"));
     }
 
-    @GetMapping("/api/v1/subscriptions/{id}/status")
-    public MembershipStatus getSubscriptionStatus(@PathVariable Long id) {
+    @GetMapping("/api/v1/members/{memberId}/status")
+    public MembershipStatus getMemberStatus(@PathVariable Long memberId) {
 
-        Subscription subscription = repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Subscription not found"));
+        List<Subscription> subscriptions = repository.findByMemberId(memberId);
 
-        return MembershipStatusCalculator.calculateStatus(
-                subscription.getStartDate(),
-                subscription.getEndDate());
+        Subscription latest = MembershipStatusCalculator.findMostRecentSubscription(subscriptions);
+
+        if (latest == null) {
+            return MembershipStatus.NONE;
+        }
+
+        return MembershipStatusCalculator.calculateStatus(latest.getStartDate(), latest.getEndDate());
     }
 
     @PostMapping("/api/v1/subscriptions")
