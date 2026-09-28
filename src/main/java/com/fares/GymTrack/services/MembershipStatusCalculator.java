@@ -1,5 +1,6 @@
 package com.fares.GymTrack.services;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import com.fares.GymTrack.entity.Subscription;
@@ -19,7 +20,7 @@ public class MembershipStatusCalculator {
         }
 
         if (hasStarted && hasNotEnded) {
-            long daysUntilEnd = today.until(endDate).getDays();
+            long daysUntilEnd = ChronoUnit.DAYS.between(today, endDate);
 
             if (daysUntilEnd <= 7) {
                 return MembershipStatus.EXPIRING_SOON;
