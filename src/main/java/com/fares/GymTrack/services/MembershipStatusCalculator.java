@@ -15,10 +15,6 @@ public class MembershipStatusCalculator {
         boolean hasStarted = today.isEqual(startDate) || today.isAfter(startDate);
         boolean hasNotEnded = today.isEqual(endDate) || today.isBefore(endDate);
 
-        if (today.isBefore(startDate)) {
-            return MembershipStatus.UPCOMING;
-        }
-
         if (hasStarted && hasNotEnded) {
             long daysUntilEnd = ChronoUnit.DAYS.between(today, endDate);
 
